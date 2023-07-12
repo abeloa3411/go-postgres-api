@@ -92,7 +92,7 @@ func(r *Repository) DeleteBook(context *fiber.Ctx) error{
 
 func(r *Repository) GetBookById(context *fiber.Ctx) error{
 
-		id := context.Params("id")
+	id := context.Params("id")
 	bookModel := &models.Books{}
 	if id == "" {
 		context.Status(http.StatusInternalServerError).JSON(&fiber.Map{
@@ -146,6 +146,12 @@ func main(){
 
 	if err != nil{
 		log.Fatal("could not load the database")
+	}
+
+	err = models.MigrateBooks(db)
+
+	if err != nil{
+		log.Fatal("could not migrate db")
 	}
 
 	r := Repository{
